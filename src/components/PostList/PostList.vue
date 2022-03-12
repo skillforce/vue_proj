@@ -1,16 +1,17 @@
 <template>
   <div class="posts">
-    <div v-for="{ name, desc, id } in posts" :key="id" class="post">
-      <div><strong>Name:</strong> {{ name }}</div>
-      <div><strong>Description:</strong> {{ desc }}</div>
-      <button @click="$emit('deletePost', id)" class="btnClose">X</button>
+    <div v-for="post in posts" :key="post.id">
+      <single-post :post="post" @deletePost="deletePost" />
     </div>
   </div>
 </template>
 
 <script>
+import SinglePost from "@/components/PostList/SinglePost/SinglePost.vue";
+
 export default {
   name: "PostList",
+  components: { SinglePost },
   props: {
     posts: {
       type: Array,
@@ -20,31 +21,17 @@ export default {
       },
     },
   },
-  emits: {
-    deletePost: (id) => typeof id === "number",
+  methods: {
+    deletePost(id) {
+      this.$emit("deletePost", id);
+    },
   },
 };
 </script>
 
 <style scoped>
-.post {
-  position: relative;
-  padding: 15px;
-  border: 2px solid teal;
-  margin-top: 5px;
-  width: 500px;
-}
-
 .posts {
   display: flex;
   flex-direction: column;
-}
-.btnClose {
-  position: absolute;
-  left: 475px;
-  top: 0;
-  padding: 5px;
-  border-radius: 13px;
-  background-color: red;
 }
 </style>

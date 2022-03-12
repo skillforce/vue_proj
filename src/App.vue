@@ -18,7 +18,7 @@ export default {
     };
   },
   methods: {
-    newPost({ newPostDesc, newPostName }) {
+    newPost(newPostDesc, newPostName) {
       this.posts.push({ id: Date.now(), name: newPostName, desc: newPostDesc });
     },
     deletePost(id) {

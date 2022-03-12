@@ -3,13 +3,7 @@
     <div>CREATE NEW POST</div>
     <input v-model="newPostName" type="text" aria-label="newPostName" placeholder="newPostName" />
     <input v-model="newPostDesc" type="text" aria-label="newPostDesc" placeholder="newPostDesc" />
-    <button
-      :disabled="!isDisabled"
-      style="margin-top: 20px"
-      @click="$emit('createNewPost', { newPostDesc, newPostName })"
-    >
-      POST
-    </button>
+    <button :disabled="!isDisabled" style="margin-top: 20px" @click="createPost">POST</button>
   </form>
 </template>
 
