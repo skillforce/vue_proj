@@ -1,7 +1,12 @@
 <template>
   <div class="postBlock">
+    <pop-up v-model:show="isPopUpShow">
+      <create-post-form @createNewPost="newPost" />
+    </pop-up>
     <post-list @deletePost="deletePost" :posts="posts" />
-    <create-post-form @createNewPost="newPost" />
+    <custom-button :btnType="'createBtn'" @click="isPopUpShow = true"
+      >Create new post</custom-button
+    >
   </div>
 </template>
 
@@ -15,14 +20,19 @@ export default {
   data() {
     return {
       posts: [],
+      isPopUpShow: false,
     };
   },
   methods: {
     newPost(newPostDesc, newPostName) {
       this.posts.push({ id: Date.now(), name: newPostName, desc: newPostDesc });
+      this.isPopUpShow = false;
     },
     deletePost(id) {
       this.posts = this.posts.filter((t) => t.id !== id);
+    },
+    closePopUp() {
+      this.isPopUpShow = false;
     },
   },
 };

@@ -2,7 +2,7 @@
   <div class="post">
     <div><strong>Name:</strong> {{ post.name }}</div>
     <div><strong>Description:</strong> {{ post.desc }}</div>
-    <button @click="$emit('deletePost', post.id)" class="btnDelete">X</button>
+    <custom-button :btn-type="'deleteBtn'" @click="$emit('deletePost', post.id)">X</custom-button>
   </div>
 </template>
 
@@ -25,14 +25,6 @@ export default {
 </script>
 
 <style scoped>
-.btnDelete {
-  position: absolute;
-  left: 475px;
-  top: 0;
-  padding: 5px;
-  border-radius: 13px;
-  background-color: red;
-}
 .post {
   position: relative;
   padding: 15px;
