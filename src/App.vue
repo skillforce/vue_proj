@@ -1,7 +1,9 @@
 <template>
   <div class="postBlock">
     <pop-up v-model:show="isPopUpShow">
-      <create-post-form @createNewPost="newPost" />
+      <template #footer>
+        <create-post-form @closePopUp="closePopUp" @createNewPost="newPost" />
+      </template>
     </pop-up>
     <post-list @deletePost="deletePost" :posts="posts" />
     <custom-button :btnType="'createBtn'" @click="isPopUpShow = true"

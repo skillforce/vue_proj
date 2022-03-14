@@ -7,13 +7,15 @@
     @keydown.esc="closePopUpHandler"
   >
     <div @click.stop class="popUp__content">
-      <slot :closePopUp="closePopUpHandler"></slot>
+      <slot name="footer"></slot>
     </div>
   </div>
 </template>
 
 <script>
-export default {
+import { defineComponent } from "vue";
+
+export default defineComponent({
   name: "popUp",
   props: {
     show: {
@@ -36,7 +38,7 @@ export default {
       this.$emit("update:show", false);
     },
   },
-};
+});
 </script>
 
 <style scoped>

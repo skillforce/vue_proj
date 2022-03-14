@@ -16,7 +16,7 @@
     <custom-button :btn-type="'createBtn'" :disabled="!isDisabled" @click="createPost"
       >POST</custom-button
     >
-    <custom-button :btn-type="'createBtn'">CLOSE</custom-button>
+    <custom-button @click="$emit('closePopUp')" :btn-type="'createBtn'">CLOSE</custom-button>
   </form>
 </template>
 
