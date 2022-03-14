@@ -2,13 +2,13 @@
   <form @submit.prevent class="newPostForm">
     <div>CREATE NEW POST</div>
     <custom-input
-      v-model="newPostName"
+      v-model.trim="newPostName"
       type="text"
       aria-label="newPostName"
       placeholder="newPostName"
     />
     <custom-input
-      v-model="newPostDesc"
+      v-model.trim="newPostDesc"
       type="text"
       aria-label="newPostDesc"
       placeholder="newPostDesc"
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     isDisabled() {
-      return this.newPostName.trim() && this.newPostDesc.trim();
+      return this.newPostName && this.newPostDesc;
     },
   },
 };

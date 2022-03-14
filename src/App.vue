@@ -1,14 +1,20 @@
 <template>
   <div class="postBlock">
+    <div>
+      <custom-button :btnType="'createBtn'" @click="isPopUpShow = true">
+        Create new post
+      </custom-button>
+      <custom-button :btnType="'createBtn'" @click="this.fetchUsers"> GET POSTS </custom-button>
+      <input v-model="modifyValue" type="text" aria-label="modifyValue" />
+    </div>
+
     <pop-up v-model:show="isPopUpShow">
       <template #footer>
         <create-post-form @closePopUp="closePopUp" @createNewPost="newPost" />
       </template>
     </pop-up>
-    <post-list @deletePost="deletePost" :posts="posts" />
-    <custom-button :btnType="'createBtn'" @click="isPopUpShow = true"
-      >Create new post</custom-button
-    >
+    <post-list v-if="isPostsLoading" @deletePost="deletePost" :posts="posts" />
+    <div v-else>LOADING...</div>
   </div>
 </template>
 
@@ -23,11 +29,17 @@ export default {
     return {
       posts: [],
       isPopUpShow: false,
+      modifyValue: "",
+      postsLimit: 10,
+      isPostsLoading: false,
     };
+  },
+  mounted() {
+    this.fetchUsers();
   },
   methods: {
     newPost(newPostDesc, newPostName) {
-      this.posts.push({ id: Date.now(), name: newPostName, desc: newPostDesc });
+      this.posts.push({ id: Date.now(), title: newPostName, body: newPostDesc });
       this.isPopUpShow = false;
     },
     deletePost(id) {
@@ -35,6 +47,19 @@ export default {
     },
     closePopUp() {
       this.isPopUpShow = false;
+    },
+    async fetchUsers() {
+      try {
+        const res = await fetch(
+          `https://jsonplaceholder.typicode.com/posts?_limit=${this.postsLimit}`
+        );
+        const newPosts = await res.json();
+        this.posts = [...this.posts, ...newPosts];
+      } catch (e) {
+        alert("Error");
+      } finally {
+        this.isPostsLoading = true;
+      }
     },
   },
 };
@@ -49,7 +74,8 @@ export default {
 
 .postBlock {
   display: flex;
-  flex-direction: row-reverse;
-  justify-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -13,9 +13,7 @@
 </template>
 
 <script>
-import { defineComponent } from "vue";
-
-export default defineComponent({
+export default {
   name: "popUp",
   props: {
     show: {
@@ -38,7 +36,7 @@ export default defineComponent({
       this.$emit("update:show", false);
     },
   },
-});
+};
 </script>
 
 <style scoped>

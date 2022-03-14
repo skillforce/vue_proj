@@ -33,11 +33,10 @@ export default {
 
 <style scoped>
 .createBtn {
-  margin-top: 10px;
+  margin: 10px 10px 0 10px;
   padding: 7px;
   background-color: greenyellow;
   border-radius: 8px;
-  align-self: flex-end;
 }
 .createBtn:disabled {
   background-color: darkgray;

@@ -1,7 +1,7 @@
 <template>
   <div class="post">
-    <div><strong>Name:</strong> {{ post.name }}</div>
-    <div><strong>Description:</strong> {{ post.desc }}</div>
+    <div><strong>Name:</strong> {{ post.title }}</div>
+    <div><strong>Description:</strong> {{ post.body }}</div>
     <custom-button :btn-type="'deleteBtn'" @click="$emit('deletePost', post.id)">X</custom-button>
   </div>
 </template>
