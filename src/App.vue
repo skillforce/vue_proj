@@ -4,8 +4,8 @@
       <custom-button :btnType="'createBtn'" @click="isPopUpShow = true">
         Create new post
       </custom-button>
-      <custom-button :btnType="'createBtn'" @click="this.fetchUsers"> GET POSTS </custom-button>
-      <input v-model="modifyValue" type="text" aria-label="modifyValue" />
+      <custom-button :btnType="'createBtn'" @click="this.fetchUsers"> GET POSTS</custom-button>
+      <custom-select @change-selected-options="changeSortType" :options="sortedOptions" />
     </div>
 
     <pop-up v-model:show="isPopUpShow">
@@ -13,7 +13,7 @@
         <create-post-form @closePopUp="closePopUp" @createNewPost="newPost" />
       </template>
     </pop-up>
-    <post-list v-if="isPostsLoading" @deletePost="deletePost" :posts="posts" />
+    <post-list v-if="isPostsLoading" @deletePost="deletePost" :posts="sortedPostList" />
     <div v-else>LOADING...</div>
   </div>
 </template>
@@ -21,10 +21,11 @@
 <script>
 import PostList from "@/components/PostList/PostList.vue";
 import CreatePostForm from "@/components/CreatePostForm/CreatePostForm.vue";
+import CustomSelect from "@/components/UI/CustomSelect.vue";
 
 export default {
   name: "App",
-  components: { CreatePostForm, PostList },
+  components: { CustomSelect, CreatePostForm, PostList },
   data() {
     return {
       posts: [],
@@ -32,12 +33,27 @@ export default {
       modifyValue: "",
       postsLimit: 10,
       isPostsLoading: false,
+      sortType: "",
+      sortedOptions: [
+        { value: "title", name: "By name" },
+        { value: "body", name: "By description" },
+      ],
     };
   },
   mounted() {
     this.fetchUsers();
   },
+  computed: {
+    sortedPostList() {
+      return this.posts.sort((post1, post2) => {
+        return post1[this.sortType]?.localeCompare(post2[this.sortType]);
+      });
+    },
+  },
   methods: {
+    changeSortType(newType) {
+      this.sortType = newType;
+    },
     newPost(newPostDesc, newPostName) {
       this.posts.push({ id: Date.now(), title: newPostName, body: newPostDesc });
       this.isPopUpShow = false;
