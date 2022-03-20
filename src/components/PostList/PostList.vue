@@ -1,7 +1,9 @@
 <template>
   <div class="posts">
     <div class="emptyPostList" v-if="posts.length === 0">No one post was created</div>
-    <single-post v-for="post in posts" :key="post.id" :post="post" @deletePost="deletePost" />
+    <transition-group name="post-list">
+      <single-post v-for="post in posts" :key="post.id" :post="post" @deletePost="deletePost" />
+    </transition-group>
   </div>
 </template>
 
@@ -40,5 +42,22 @@ export default {
   margin: 10% 0 0 30%;
   color: red;
   white-space: nowrap;
+}
+
+.post-list {
+  display: inline-block;
+  margin-right: 10px;
+}
+.post-list-enter-active,
+.post-list-leave-active {
+  transition: all 0.4s ease;
+}
+.post-list-enter-from,
+.post-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+.post-list-move {
+  transition: transform 0.4s;
 }
 </style>
