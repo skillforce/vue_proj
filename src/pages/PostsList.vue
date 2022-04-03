@@ -5,28 +5,12 @@
         <custom-button :btnType="'createBtn'" @click="isPopUpShow = true">
           Create new post
         </custom-button>
-        <custom-button :btnType="'createBtn'" @click="this.fetchUsers">GET POSTS</custom-button>
         <custom-select @change-selected-options="changeSortType" :options="sortedOptions" />
       </div>
       <div class="searchByNameBlock">
         <input placeholder="Search by name..." v-model="searchByNameQuery" type="text" />
       </div>
-      <div class="paginationBlock">
-        <div>
-          <custom-button
-            :disabled="postsPage > totalPostsPage - 1"
-            @click="changePagePostsList('increment')"
-            :btnType="'createBtn'"
-            >NEXT</custom-button
-          >
-          <custom-button
-            :disabled="postsPage <= 1"
-            @click="changePagePostsList('decrement')"
-            :btnType="'createBtn'"
-            >PREV</custom-button
-          >
-        </div>
-      </div>
+      <div class="paginationBlock"></div>
     </div>
     <pop-up v-model:show="isPopUpShow">
       <template #footer>
@@ -36,6 +20,7 @@
     <post-list v-if="isPostsLoading" @deletePost="deletePost" :posts="searchByNameList" />
     <div v-else>LOADING...</div>
   </div>
+  <div ref="observer" class="observer"></div>
 </template>
 
 <script>
@@ -44,7 +29,7 @@ import CreatePostForm from "@/components/CreatePostForm/CreatePostForm.vue";
 import CustomSelect from "@/components/UI/CustomSelect.vue";
 
 export default {
-  name: "App",
+  name: "PostsList",
   components: { CustomSelect, CreatePostForm, PostList },
   data() {
     return {
@@ -58,13 +43,25 @@ export default {
         { value: "title", name: "By name" },
         { value: "body", name: "By description" },
       ],
-      totalPostsPage: 1,
+      totalPostsPage: 0,
       postsLimit: 10,
       postsPage: 1,
     };
   },
   mounted() {
     this.fetchUsers();
+
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.postsPage <= this.totalPostsPage) {
+        this.postsPage += 1;
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPostList() {
@@ -84,18 +81,6 @@ export default {
     },
   },
   methods: {
-    changePagePostsList(type) {
-      switch (type) {
-        case "increment":
-          if (this.postsPage < this.totalPostsPage) this.postsPage += 1;
-          break;
-        case "decrement":
-          if (this.postsPage > 1) this.postsPage -= 1;
-          break;
-        default:
-          break;
-      }
-    },
     changeSortType(newType) {
       this.sortType = newType;
     },
@@ -118,7 +103,7 @@ export default {
         const newPosts = await res.json();
         this.totalPostsPage = Math.ceil(headersTotalCount / this.postsLimit);
 
-        this.posts = [...newPosts];
+        this.posts = [...this.posts, ...newPosts];
       } catch (e) {
         alert("Error");
       } finally {
@@ -130,18 +115,6 @@ export default {
 </script>
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-.postBlock {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 .manageListPanel {
   display: flex;
   align-items: center;
@@ -156,5 +129,8 @@ export default {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+.observer {
+  height: 30px;
 }
 </style>
