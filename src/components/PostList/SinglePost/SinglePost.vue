@@ -2,7 +2,12 @@
   <div class="post">
     <div><strong>Name:</strong> {{ post.title }}</div>
     <div><strong>Description:</strong> {{ post.body }}</div>
-    <custom-button :btn-type="'deleteBtn'" @click="$emit('deletePost', post.id)">X</custom-button>
+    <div class="singlePostBtnBlock">
+      <custom-button :btn-type="'deleteBtn'" @click="$emit('deletePost', post.id)">X</custom-button>
+      <custom-button :btn-type="'createBtn'" @click="$router.push(`/posts/${post.id}`)"
+        >OPEN</custom-button
+      >
+    </div>
   </div>
 </template>
 
@@ -31,5 +36,8 @@ export default {
   border: 2px solid teal;
   margin-top: 5px;
   width: 500px;
+}
+.singlePostBtnBlock {
+  display: flex;
 }
 </style>
